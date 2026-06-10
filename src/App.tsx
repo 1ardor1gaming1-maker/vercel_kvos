@@ -19,13 +19,180 @@ import {
   Copy,
   Check,
   Zap,
-  HardDrive
+  HardDrive,
+  Palette
 } from "lucide-react";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<"terminal" | "code" | "builder" | "docs" | "memorial">("terminal");
   const [copiedScript, setCopiedScript] = useState<string | null>(null);
   const [language, setLanguage] = useState<Language>("ru"); // Russian as default per owner origin, easy to toggle!
+  const [themeMode, setThemeMode] = useState<"indigo" | "matrix" | "amber" | "glacier" | "classic">("indigo");
+
+  const getThemeStyles = () => {
+    switch (themeMode) {
+      case "matrix":
+        return `
+          :root {
+            --color-primary-base: #22c55e;
+            --color-primary-glow: rgba(34, 197, 94, 0.4);
+            --color-accent: #10b981;
+          }
+          .mesh-bg {
+            background: radial-gradient(circle at 20% 30%, #03200c 0%, transparent 40%), radial-gradient(circle at 80% 70%, #08140a 0%, transparent 40%), radial-gradient(circle at 50% 50%, #010402 0%, #010402 100%) !important;
+          }
+          .btn-primary-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+            color: #000 !important;
+          }
+          .text-indigo-400, .text-indigo-300, .text-indigo-350, .text-indigo-600 {
+            color: #10b981 !important;
+          }
+          .border-indigo-500\\/15, .border-indigo-500\\/20, .border-indigo-500\\/10 {
+            border-color: rgba(16, 185, 129, 0.25) !important;
+          }
+          .bg-indigo-500\\/10, .bg-indigo-400\\/10 {
+            background-color: rgba(16, 185, 129, 0.1) !important;
+            color: #10b981 !important;
+          }
+          .bg-indigo-650 {
+            background-color: #059669 !important;
+          }
+          .text-emerald-400, .text-emerald-500 {
+            color: #22c55e !important;
+          }
+        `;
+      case "amber":
+        return `
+          :root {
+            --color-primary-base: #f59e0b;
+            --color-primary-glow: rgba(245, 158, 11, 0.4);
+            --color-accent: #f59e0b;
+          }
+          .mesh-bg {
+            background: radial-gradient(circle at 20% 30%, #2d1904 0%, transparent 40%), radial-gradient(circle at 80% 70%, #170f03 0%, transparent 40%), radial-gradient(circle at 50% 50%, #050301 0%, #050301 100%) !important;
+          }
+          .btn-primary-gradient {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3) !important;
+            color: #000 !important;
+          }
+          .text-indigo-400, .text-indigo-300, .text-indigo-350, .text-indigo-600 {
+            color: #f59e0b !important;
+          }
+          .border-indigo-500\\/15, .border-indigo-500\\/20, .border-indigo-500\\/10 {
+            border-color: rgba(245, 158, 11, 0.25) !important;
+          }
+          .bg-indigo-500\\/10, .bg-indigo-400\\/10 {
+            background-color: rgba(245, 158, 11, 0.1) !important;
+            color: #f59e0b !important;
+          }
+          .bg-indigo-650 {
+            background-color: #d97706 !important;
+          }
+          .text-emerald-400, .text-emerald-500 {
+            color: #f59e0b !important;
+          }
+          .scanline {
+            background: linear-gradient(
+              to bottom,
+              rgba(255,255,255,0),
+              rgba(245, 158, 11, 0.08) 10%,
+              rgba(245, 158, 11, 0.15) 30%,
+              rgba(245, 158, 11, 0.08) 50%,
+              rgba(255,255,255,0)
+            ) !important;
+          }
+        `;
+      case "glacier":
+        return `
+          :root {
+            --color-primary-base: #06b6d4;
+            --color-primary-glow: rgba(6, 182, 212, 0.4);
+            --color-accent: #06b6d4;
+          }
+          .mesh-bg {
+            background: radial-gradient(circle at 20% 30%, #083344 0%, transparent 40%), radial-gradient(circle at 80% 70%, #0f172a 0%, transparent 40%), radial-gradient(circle at 50% 50%, #020617 0%, #020617 100%) !important;
+          }
+          .btn-primary-gradient {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3) !important;
+            color: #000 !important;
+          }
+          .text-indigo-400, .text-indigo-300, .text-indigo-350, .text-indigo-600 {
+            color: #22d3ee !important;
+          }
+          .border-indigo-500\\/15, .border-indigo-500\\/20, .border-indigo-500\\/10 {
+            border-color: rgba(6, 182, 212, 0.25) !important;
+          }
+          .bg-indigo-500\\/10, .bg-indigo-400\\/10 {
+            background-color: rgba(6, 182, 212, 0.1) !important;
+            color: #22d3ee !important;
+          }
+          .bg-indigo-650 {
+            background-color: #0891b2 !important;
+          }
+          .text-emerald-400, .text-emerald-500 {
+            color: #06b6d4 !important;
+          }
+          .scanline {
+            background: linear-gradient(
+              to bottom,
+              rgba(255,255,255,0),
+              rgba(6, 182, 212, 0.08) 10%,
+              rgba(6, 182, 212, 0.15) 30%,
+              rgba(6, 182, 212, 0.08) 50%,
+              rgba(255,255,255,0)
+            ) !important;
+          }
+        `;
+      case "classic":
+        return `
+          :root {
+            --color-primary-base: #cbd5e1;
+            --color-primary-glow: rgba(203, 213, 225, 0.3);
+            --color-accent: #ffffff;
+          }
+          .mesh-bg {
+            background: radial-gradient(circle at 20% 30%, #1e293b 0%, transparent 40%), radial-gradient(circle at 80% 70%, #0f172a 0%, transparent 40%), radial-gradient(circle at 50% 50%, #030712 0%, #030712 100%) !important;
+          }
+          .btn-primary-gradient {
+            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%) !important;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15) !important;
+            color: #0f172a !important;
+          }
+          .text-indigo-400, .text-indigo-300, .text-indigo-350, .text-indigo-600 {
+            color: #cbd5e1 !important;
+          }
+          .border-indigo-500\\/15, .border-indigo-500\\/20, .border-indigo-500\\/10 {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+          }
+          .bg-indigo-500\\/10, .bg-indigo-400\\/10 {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: #f8fafc !important;
+          }
+          .bg-indigo-650 {
+            background-color: #475569 !important;
+          }
+          .text-emerald-400, .text-emerald-500 {
+            color: #e2e8f0 !important;
+          }
+          .scanline {
+            background: linear-gradient(
+              to bottom,
+              rgba(255,255,255,0),
+              rgba(255, 255, 255, 0.08) 10%,
+              rgba(255, 255, 255, 0.15) 30%,
+              rgba(255, 255, 255, 0.08) 50%,
+              rgba(255, 255, 255, 0)
+            ) !important;
+          }
+        `;
+      default: // indigo
+        return "";
+    }
+  };
 
   const t = translations[language];
 
@@ -84,6 +251,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
       
       {/* Frosted Glass Mesh Background */}
       <div className="mesh-bg" />
+      <style dangerouslySetInnerHTML={{ __html: getThemeStyles() }} />
 
       {/* Dynamic scanline overlay behind whole landing page */}
       <div className="pointer-events-none fixed inset-0 z-50 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(124,58,237,0.03),rgba(0,0,0,0))]" />
@@ -126,6 +294,34 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
                 >
                   <span>{lang.flag}</span>
                   <span className="hidden xs:inline">{lang.label.toUpperCase().substring(0, 2)}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Theme switcher */}
+            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/5 shadow-inner" id="theme-pill-picker">
+              <span className="pl-1.5 pr-0.5 text-slate-500">
+                <Palette className="w-3.5 h-3.5" />
+              </span>
+              {([
+                { key: "indigo", color: "bg-indigo-500", name: language === "ru" ? "Инд" : "Ind" },
+                { key: "matrix", color: "bg-emerald-500", name: language === "ru" ? "Матр" : "Matr" },
+                { key: "amber", color: "bg-amber-500", name: language === "ru" ? "Янт" : "Amb" },
+                { key: "glacier", color: "bg-cyan-400", name: language === "ru" ? "Лед" : "Glac" },
+                { key: "classic", color: "bg-slate-300", name: language === "ru" ? "Класс" : "Clas" }
+              ] as const).map((theme) => (
+                <button
+                  key={theme.key}
+                  onClick={() => setThemeMode(theme.key)}
+                  className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition flex items-center gap-1 cursor-pointer select-none ${
+                    themeMode === theme.key
+                      ? "bg-indigo-650 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                  }`}
+                  title={`Switch theme style to ${theme.key}`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full ${theme.color}`} />
+                  <span className="hidden xs:inline">{theme.name}</span>
                 </button>
               ))}
             </div>
