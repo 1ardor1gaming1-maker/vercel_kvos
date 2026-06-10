@@ -1,0 +1,6 @@
+{
+  "name": "KV/OS Official Website",
+  "description": "The official high-fidelity landing page for KV/OS v0.11.1 - a custom 64-bit hobbyist operating system with a fully interactive web-based terminal emulator, codebase viewer, builder instructions, and a loving tribute to Musya.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
