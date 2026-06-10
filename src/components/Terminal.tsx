@@ -32,11 +32,19 @@ export default function Terminal({
   const terminalEndRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const crashTimerRef = useRef<any>(null);
+  const bootIntervalRef = useRef<any>(null);
 
   const clearCrashTimer = () => {
     if (crashTimerRef.current) {
       clearTimeout(crashTimerRef.current);
       crashTimerRef.current = null;
+    }
+  };
+
+  const clearBootInterval = () => {
+    if (bootIntervalRef.current) {
+      clearInterval(bootIntervalRef.current);
+      bootIntervalRef.current = null;
     }
   };
 
@@ -121,6 +129,7 @@ export default function Terminal({
   // Initial Boot loader simulation
   const simulateBoot = () => {
     clearCrashTimer();
+    clearBootInterval();
     setScreenWhiteout(false);
     setBooting(true);
     setBootStep(0);
@@ -155,12 +164,14 @@ export default function Terminal({
         setBootStep(currentStep);
       } else {
         clearInterval(interval);
+        bootIntervalRef.current = null;
         setBooting(false);
 
         clearCrashTimer();
         // Automatic CRT screen deflection timer disabled so the terminal remains perfectly stable during emulation.
       }
     }, 350);
+    bootIntervalRef.current = interval;
   };
 
   useEffect(() => {
@@ -168,14 +179,19 @@ export default function Terminal({
       simulateBoot();
     } else {
       clearCrashTimer();
+      clearBootInterval();
       setScreenWhiteout(false);
       setHistory([]);
     }
+    return () => {
+      clearBootInterval();
+    };
   }, [powerOn, language]);
 
   useEffect(() => {
     return () => {
       clearCrashTimer();
+      clearBootInterval();
     };
   }, []);
 
@@ -595,7 +611,7 @@ export default function Terminal({
                     </div>
                   )}
 
-                  {history.map((line, idx) => {
+                  {history.filter(line => line && line.type).map((line, idx) => {
                     let colorClass = "text-emerald-500";
                     if (line.type === "input") colorClass = "text-slate-100 font-medium";
                     if (line.type === "error") colorClass = "text-red-400 retro-glow-green font-semibold";
