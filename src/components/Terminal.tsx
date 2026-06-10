@@ -158,11 +158,7 @@ export default function Terminal({
         setBooting(false);
 
         clearCrashTimer();
-        // TRIGGER SCREEN WHITEOUT CRASH AFTER 8 SECONDS OF ACTIVE EMULATION
-        crashTimerRef.current = setTimeout(() => {
-          setScreenWhiteout(true);
-          playBeep(120, 600); // Low flyback transformer warning buzz
-        }, 8000);
+        // Automatic CRT screen deflection timer disabled so the terminal remains perfectly stable during emulation.
       }
     }, 350);
   };
